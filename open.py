@@ -2,8 +2,8 @@ from water import watershed,sharpen,auto_canny,blobdetect
 import numpy as np
 import cv2
 
-# Load an color image in grayscale
-frame2 = cv2.imread('ds3.jpg')
+
+frame2 = cv2.imread('dataset/img1.jpg') #img load 
 sharped=sharpen(frame2)
 
 frame=cv2.medianBlur(frame2,5)
@@ -15,7 +15,7 @@ hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 #laplacian = cv2.Laplacian(black2,cv2.CV_64F)
 
 
-
+'''
 
 green = 60;
 blue = 120;
@@ -38,21 +38,21 @@ upperdark=np.array([70 ,24 ,180])
 lowersand=np.array([18 ,22 ,100])
 uppersand=np.array([23 ,30 ,205])
 lower=np.array([15,15,90])
-upper=np.array([70,35,230])
-maskother=cv2.inRange(hsv,lower,upper)
+upper=np.array([70,35,230])'''
+'''maskother=cv2.inRange(hsv,lower,upper)
 
 masklight= cv2.inRange(hsv,lowerlight,upperlight)
 maskdark= cv2.inRange(hsv,lowerdark,upperdark)
 masksand= cv2.inRange(hsv,lowersand,uppersand)
 mask = cv2.bitwise_or(maskdark, masklight)
-mask2=cv2.bitwise_or(mask,masksand)
-
+mask2=cv2.bitwise_or(mask,masksand)'''
+'''
 img=cv2.GaussianBlur(mask2,(5,5),0)
     # Bitwise-AND mask and original image
 res = cv2.bitwise_and(frame2,frame2, mask= mask2)
 res2=cv2.bitwise_and(frame2,frame2,mask=maskother)
 kernel = np.ones((5,5), np.uint8)
-
+'''
 
 #################################################################################################
 
@@ -82,20 +82,9 @@ for i in range(0, nb_components):
 
 '''
 
-
-
-
-
-
-
-
-
-
-
-
 ####################################MORPHOLOGY CLOSING#################################################################
-kernel = np.ones((5,5),np.uint8)
-closing = cv2.morphologyEx(res2, cv2.MORPH_CLOSE, kernel)
+'''kernel = np.ones((5,5),np.uint8)
+closing = cv2.morphologyEx(res2, cv2.MORPH_CLOSE, kernel)'''
 ##########################################K-MEANS##############################################
 Z = frame.reshape((-1,3))
 
@@ -105,6 +94,7 @@ Z = np.float32(Z)
 # define criteria, number of clusters(K) and apply kmeans()
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
 K = 20
+
 ret,label,center=cv2.kmeans(Z,K,None,criteria,10,cv2.KMEANS_RANDOM_CENTERS)
 
 # Now convert back into uint8, and make original image
@@ -120,18 +110,6 @@ resd2=cv2.cvtColor(resd2,cv2.COLOR_BGR2GRAY)
 #resd2=cv2.medianBlur(resd2,5)
 sharpcluster=sharpen(resd2)
 
-
-
-
-
-
-
-
-
-
-
-
-
 ##########################################canny edge####################################################
 edges = cv2.Canny(frame,400,600)
 #edges2=cv2.Canny(img_dilation,249,250)
@@ -143,16 +121,15 @@ smoothmeans=cv2.GaussianBlur(resd2,(5,5),0)
 equ = cv2.equalizeHist(resd2)
 
 
-
 ####################################BLOBDETECT######################
 final=blobdetect(equ)
 
-
 #########################################IMAGE errosion dilation 
-img_erosion = cv2.erode(equ, kernel, iterations=1)
+
+'''img_erosion = cv2.erode(equ, kernel, iterations=1)
 
 img_dilation = cv2.dilate(img_erosion, kernel, iterations=1)
-
+'''
 
 
    ##################################IMAGE DISPLAY########################################################################################
